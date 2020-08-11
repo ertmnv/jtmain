@@ -59,11 +59,12 @@
 
 
 <!-- Liquibase -->
+<!-- 
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-
+ -->
         <!-- MySQL connector -->
         <dependency>
             <groupId>mysql</groupId>
