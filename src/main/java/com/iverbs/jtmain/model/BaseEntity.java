@@ -18,28 +18,28 @@ import lombok.Data;
 @MappedSuperclass
 @Data
 public class BaseEntity {
-    
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
-    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @CreatedDate
-    @Column(name="created")
+    @Column(name = "created")
     private Date created;
-    
+
     @LastModifiedDate
-    @Column(name="updated")
+    @Column(name = "updated")
     private Date updated;
-    
+
     @Enumerated(EnumType.STRING)
-    @Column(name="status")
+    @Column(name = "status")
     private Status status;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

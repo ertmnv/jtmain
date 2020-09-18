@@ -8,7 +8,7 @@ public class JwtAuthenticationException extends AuthenticationException {
         super(msg, t);
         // TODO Auto-generated constructor stub
     }
-    
+
     public JwtAuthenticationException(String msg) {
         super(msg);
         // TODO Auto-generated constructor stub

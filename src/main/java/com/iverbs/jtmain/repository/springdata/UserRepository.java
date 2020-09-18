@@ -1,4 +1,4 @@
-package com.iverbs.jtmain.repository;
+package com.iverbs.jtmain.repository.springdata;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -10,41 +10,37 @@ import org.springframework.stereotype.Service;
 import com.iverbs.jtmain.model.Role;
 import com.iverbs.jtmain.model.Status;
 import com.iverbs.jtmain.model.User;
-import com.iverbs.jtmain.repository.UserRepository;
-import com.iverbs.jtmain.repository.RoleRepository;
+import com.iverbs.jtmain.repository.springdata.UserRepository;
+import com.iverbs.jtmain.repository.springdata.RoleRepository;
 import com.iverbs.jtmain.service.UserService;
 
-
 @Service
-public class UserServiceImpl implements UserService{
-    
+public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
+
     private final RoleRepository roleRepository;
+
     private final BCryptPasswordEncoder passwordEncoder;
-    
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, 
-            RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+            BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    
-    
 
     @Override
     public User register(User user) {
         // TODO Auto-generated method stub
-        Role roleUser = roleRepository.findByName("ROLE_USER"); 
+        Role roleUser = roleRepository.findByName("ROLE_USER");
         List<Role> userRoles = new ArrayList<Role>();
         userRoles.add(roleUser);
-        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(userRoles);
         user.setStatus(Status.ACTIVE);
-        
         User registredUser = userRepository.save(user);
-        
         return registredUser;
     }
 
@@ -66,7 +62,6 @@ public class UserServiceImpl implements UserService{
     public User findById(Long id) {
         // TODO Auto-generated method stub
         User result = userRepository.findById(id).orElse(null);
-        
         if (result == null) {
             return null;
         }

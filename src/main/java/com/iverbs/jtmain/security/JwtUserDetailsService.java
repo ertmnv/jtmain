@@ -15,24 +15,20 @@ import com.iverbs.jtmain.service.UserService;
 public class JwtUserDetailsService implements UserDetailsService {
 
     private UserService userService;
-    
+
     @Autowired
     public JwtUserDetailsService(UserService userService) {
         this.userService = userService;
     }
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // TODO Auto-generated method stub
-        
         User user = userService.findByUsername(username);
-        
         if (user == null) {
             throw new UsernameNotFoundException("User with username" + username + "not found");
         }
-        
         JwtUser jwtUser = JwtUserFactory.create(user);
-        
         return jwtUser;
     }
 
