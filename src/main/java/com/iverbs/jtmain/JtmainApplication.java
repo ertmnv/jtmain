@@ -14,6 +14,18 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import com.iverbs.jtmain.repository.CourseRepositoryImpl;
 
+/**
+ * CR1: General notes:
+ * 0. Add readme with description of the project, commands to take evrything up, database processing, migration, etc.
+ * 1. Make checkstyle plugings working with spring boot (Checkstyle, SpotBugs, PMD)
+ * 2. Add javadocs to interfaces and classes.
+ * 3. Refactor the project to have multimodule project with repos, services, api-services, controllers
+ * 4. Introduce database migrations in detached module if any (I saw liquibase)
+ * 5.  
+ */
+
+
+
 @SpringBootApplication
 @EnableCaching
 public class JtmainApplication {

@@ -1,37 +1,23 @@
 package com.iverbs.jtmain.model;
 
+import com.iverbs.jtmain.dto.CourseDto;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.PreRemove;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.iverbs.jtmain.dto.CourseDto;
 
 @Entity
 public class Course {
@@ -155,6 +141,11 @@ public class Course {
         return true;
     }
 
+    // CR1: It is not a good idea to couple business model and representation model.
+    // 1. You couple two layes model and representative model
+    // 2. What are going to do if you will have more complex cases, like dto which contains data of several entities?
+    // It is better to use specific converters. Your model must, repos and business layer must know nothing about
+    // representative layer.
     public CourseDto toCourseDto() {
         CourseDto courseDto = new CourseDto();
         courseDto.setId(this.getId());

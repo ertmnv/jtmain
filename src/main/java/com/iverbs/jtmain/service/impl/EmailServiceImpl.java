@@ -13,6 +13,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
+    // CR1: Is it implemented? Could you please show the config or how it was configured and generated?
     @Override
     public void sendMail(String to, String subject, String body) {
         // TODO Auto-generated method stub

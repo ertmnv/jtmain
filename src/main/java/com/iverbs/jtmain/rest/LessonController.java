@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iverbs.jtmain.model.Lesson;
 import com.iverbs.jtmain.service.LessonService;
 
+// CR1: Could you lease add the validation that student may change only its own courses, lessons, etc?
 @RestController
 @RequestMapping("/api/v1")
 public class LessonController {

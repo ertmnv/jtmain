@@ -3,6 +3,7 @@ package com.iverbs.jtmain.dto;
 import com.iverbs.jtmain.model.User;
 import com.iverbs.jtmain.shared.UniqueUsername;
 
+// CR1: you have lombok in your project. Why don't you use it for eg here? (See @Data annotation)
 public class RegistrationRequestDto {
 
     @UniqueUsername

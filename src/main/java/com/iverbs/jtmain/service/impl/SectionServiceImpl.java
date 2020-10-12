@@ -12,6 +12,7 @@ import com.iverbs.jtmain.repository.CourseRepository;
 import com.iverbs.jtmain.repository.SectionRepository;
 import com.iverbs.jtmain.service.SectionService;
 
+// CR1: you can consider to apply @Transactional to class level
 @Service
 public class SectionServiceImpl implements SectionService {
 
@@ -23,6 +24,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public List<Section> getAllSections() {
+        // CR1: what does it mean (stub)?
         // TODO Auto-generated method stub
         return sectionRepository.findAll();
     }

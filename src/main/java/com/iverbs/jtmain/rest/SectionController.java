@@ -1,13 +1,14 @@
 package com.iverbs.jtmain.rest;
 
+import com.iverbs.jtmain.dto.SectionDto;
+import com.iverbs.jtmain.model.Section;
+import com.iverbs.jtmain.service.SectionService;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.iverbs.jtmain.dto.CourseDto;
-import com.iverbs.jtmain.dto.SectionDto;
-import com.iverbs.jtmain.model.Course;
-import com.iverbs.jtmain.model.Section;
-import com.iverbs.jtmain.service.SectionService;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -44,6 +39,11 @@ public class SectionController {
 
     @GetMapping("/sections")
     List<SectionDto> getAllSections(Pageable pageable) {
+        // CR1 for this purpose I would recommend to create api service and specific converter to convert
+        //  business entity into dto. Ideally controllers must know only api services interfaces and not know any
+        //  info about business layer.
+        // Also I would recommend to create transaction in apilayer to have an ability to perform complex operations
+        // which involves multiple business services.
         return sectionService.getAllSections().stream().map(section -> section.toSectionDto())
                 .collect(Collectors.toList());
     }

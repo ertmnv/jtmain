@@ -69,6 +69,9 @@ public class CourseController {
 
     @DeleteMapping("/courses/{courseId}")
     ResponseEntity deleteCourse(@PathVariable Long courseId, Principal principal) {
+        // CR1: seems, the best candidate for this stuff is move it to api services where you can
+        // check student's access to cource or lesson. Be aware - do not use current user principal in business
+        // services. There can be situations when you don't have a current user (for eg background tasks).
         // TODO before deletion we should check that currently logged user has course
         // which is being passed as parameter
         // Long authorId =
