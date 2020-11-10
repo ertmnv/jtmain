@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.api.services.CourseApiService;
 import org.db.dto.CourseDto;
 import org.db.dto.PageForCourses;
 import org.db.model.Course;
@@ -33,63 +34,37 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
 
     @Autowired
-    private CourseService courseService;
-
-    @Autowired
-    private UserService userservice;
+    private CourseApiService courseApiService;
 
     @PostMapping("/courses/{authorId}")
     ResponseEntity createCourse(@Valid @RequestBody Course course, @PathVariable Long authorId) {
-        // TODO @CurrentUser User user - should be used instead authorId
-        Course createdCourse = courseService.createCourse(course, authorId);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("course", createdCourse.toCourseDto());
-        return ResponseEntity.ok(response);
+        return courseApiService.createCourse(course, authorId);
     }
 
     @GetMapping("/courses/{authorId}")
     List<CourseDto> getAllCoursesManagedByAuthor(@PathVariable Long authorId) {
-        return courseService.getAllCoursesManagedByAuthor(authorId).stream().map(course -> course.toCourseDto())
-                .collect(Collectors.toList());
+        return courseApiService.getAllCoursesManagedByAuthor(authorId);
     }
 
     @GetMapping("/coursesbystudent/{studentId}")
     List<CourseDto> getAllCoursesTakenByStudent(@PathVariable Long studentId) {
-        return courseService.getAllCoursesTakenByStudent(studentId).stream().map(course -> course.toCourseDto())
-                .collect(Collectors.toList());
+        return courseApiService.getAllCoursesTakenByStudent(studentId);
     }
 
     @PatchMapping("/courses/{authorId}")
     ResponseEntity editCourse(@RequestBody Course course, @PathVariable Long authorId) {
-        Course editedCourse = courseService.editCourse(course, authorId);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("course", editedCourse.toCourseDto());
-        return ResponseEntity.ok(response);
+        return courseApiService.editCourse(course, authorId);
     }
 
     @DeleteMapping("/courses/{courseId}")
     ResponseEntity deleteCourse(@PathVariable Long courseId, Principal principal) {
-        // CR1: seems, the best candidate for this stuff is move it to api services where you can
-        // check student's access to cource or lesson. Be aware - do not use current user principal in business
-        // services. There can be situations when you don't have a current user (for eg background tasks).
-        // TODO before deletion we should check that currently logged user has course
-        // which is being passed as parameter
-        // Long authorId =
-        // userservice.findByUsername(principal.getName()).getAuthor().getId();
-        courseService.deleteCourse(courseId);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("message", "course with id" + courseId + "was deleted");
-        return ResponseEntity.ok(response);
+        return courseApiService.deleteCourse(courseId, principal);
     }
 
     @GetMapping("/courses")
     ResponseEntity<PageForCourses> getAllCoursesByPage(@RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "2") Integer size) {
-        PageForCourses pageForCourses = new PageForCourses();
-        pageForCourses.setContent(courseService.getAllCourses(page, size).parallelStream()
-                .map(course -> course.toCourseDto()).collect(Collectors.toList()));
-        pageForCourses.setTotalElements(courseService.getNumberOfCourses());
-        return new ResponseEntity<PageForCourses>(pageForCourses, new HttpHeaders(), HttpStatus.OK);
+        return courseApiService.getAllCoursesByPage(page, size);
     }
 
 }

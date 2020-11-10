@@ -1,31 +1,37 @@
-version: '3.3'
+version: "3.3"
 services:
   db:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: '1234'
+      MYSQL_ROOT_PASSWORD: "1234"
     ports:
       # <Port exposed> : < MySQL Port running inside container>
-      - '33006:3306'
+      - "33006:3306"
     expose:
       # Opens port 3306 on the container
-      - '33006'
+      - "33006"
       # Where our data will be persisted
     volumes:
-      - ./sql-scripts:/docker-entrypoint-initdb.d/ 
-
-  book-manager-app:
-    restart: on-failure
-    build: 
-      context: ../
-      dockerfile: ./docker/Dockerfile
-    expose:
-      - "9090"
-    ports:
-      - 9090:9090
-    depends_on:
-      - db
-# Names our volume
+      - ./sql-scripts:/docker-entrypoint-initdb.d/
+    networks:
+      - app-net
+ # app:
+ #   restart: on-failure
+ #   build:
+ #     context: ../
+ #     dockerfile: ./docker/Dockerfile
+ #   expose:
+ #     - "9090"
+ #   ports:
+ #     - 9090:9090
+ #   depends_on:
+ #      - db
+ #    networks:
+ #     - app-net
 volumes:
   my-db:
+
+networks:
+  app-net:
+

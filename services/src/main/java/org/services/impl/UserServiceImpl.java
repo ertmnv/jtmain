@@ -3,6 +3,8 @@ package org.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import org.db.model.Role;
 import org.db.model.Status;
 import org.db.model.User;
@@ -12,17 +14,23 @@ import org.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private  UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    @Autowired
+    private  RoleRepository roleRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private  BCryptPasswordEncoder passwordEncoder;
 
+    /*
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
             BCryptPasswordEncoder passwordEncoder) {
@@ -30,8 +38,10 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    */
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public User register(User user) {
         // TODO Auto-generated method stub
         Role roleUser = roleRepository.findByName("ROLE_USER");

@@ -25,15 +25,18 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.javatrening.n</groupId>
-			<artifactId>services</artifactId>
-			<version>1.0</version>
-		</dependency>
+        
+        <dependency>
+            <groupId>com.javatrening.n</groupId>
+            <artifactId>services</artifactId>
+            <version>1.0</version>
+        </dependency>
+		 <!--  
 		<dependency>
 			<groupId>com.javatrening.n</groupId>
 			<artifactId>db</artifactId>
 			<version>1.0</version>
 		</dependency>
+		-->
 	</dependencies>
 </project>

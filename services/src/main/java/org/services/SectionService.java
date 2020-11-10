@@ -8,6 +8,7 @@ import org.db.model.Section;
 
 public interface SectionService {
 
+    
     List<Section> getAllSections();
 
     Section createSection(Section section, Long courseId);

@@ -1,0 +1,34 @@
+INSERT INTO `jt_database`.`users`
+(`id`,
+`created`,
+`status`,
+`updated`,
+`email`,
+`first_name`,
+`last_name`,
+`password`,
+`username`)
+VALUES
+(1,
+NULL,
+'ACTIVE',
+NULL,
+'q',
+'q',
+'q',
+'$2a$10$93kNlngjNIJYRYynvK6WPOH/6JrgY4Ze7T22.u9yKIqWTeYd3JwvW',
+'user-1@app.com');
+GO
+INSERT INTO `jt_database`.`author`
+(`id`,
+`created`,
+`status`,
+`updated`,
+`user_id`)
+VALUES
+(1,
+NULL,
+NULL,
+NULL,
+1);
+GO
