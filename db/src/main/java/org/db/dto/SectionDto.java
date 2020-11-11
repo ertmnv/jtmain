@@ -15,6 +15,6 @@ public class SectionDto {
 
     private Long courseId;
 
-    private List<LessonDto> lessonDtoList;
+    private List<LessonDto> lessons;
     
 }

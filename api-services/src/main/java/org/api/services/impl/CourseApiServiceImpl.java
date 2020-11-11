@@ -9,16 +9,20 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.api.services.CourseApiService;
+import org.api.services.shared.PermissionDeniedException;
 import org.db.dto.CourseDto;
 import org.db.dto.PageForCourses;
 import org.db.model.Course;
+import org.mapstruct.factory.Mappers;
 import org.services.CourseService;
+import org.services.PermissionCheckService;
 import org.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,8 +39,12 @@ public class CourseApiServiceImpl implements CourseApiService {
 
     @Autowired
     private UserService userservice;
+    
+    @Autowired
+    PermissionCheckService permissionCheckService;
 
     @Override
+    @Transactional
     public ResponseEntity createCourse(Course course, Long authorId) {
         // TODO @CurrentUser User user - should be used instead authorId
         Course createdCourse = courseService.createCourse(course, authorId);
@@ -46,19 +54,27 @@ public class CourseApiServiceImpl implements CourseApiService {
     }
 
     @Override
+    @Transactional
     public List<CourseDto> getAllCoursesManagedByAuthor(Long authorId) {
-        return courseService.getAllCoursesManagedByAuthor(authorId).stream().map(course -> course.toCourseDto())
+        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
+        return courseService.getAllCoursesManagedByAuthor(authorId).stream().map(course -> INSTANCE.courseToCourseDto(course))
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public List<CourseDto> getAllCoursesTakenByStudent(Long studentId) {
         return courseService.getAllCoursesTakenByStudent(studentId).stream().map(course -> course.toCourseDto())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ResponseEntity editCourse(Course course, Long authorId) {
+    @Transactional
+    public ResponseEntity editCourse(Course course, Principal principal) {
+        Long authorId = userservice.findByUsername(principal.getName()).getAuthor().getId();
+        if (!permissionCheckService.doesUserHaveUpdateDeleteCoursePermission(authorId, course.getId())) {
+            throw new PermissionDeniedException("author doesn't own provided course");
+        }
         Course editedCourse = courseService.editCourse(course, authorId);
         Map<Object, Object> response = new HashMap<>();
         response.put("course", editedCourse.toCourseDto());
@@ -66,14 +82,12 @@ public class CourseApiServiceImpl implements CourseApiService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity deleteCourse(Long courseId, Principal principal) {
-        // CR1: seems, the best candidate for this stuff is move it to api services where you can
-        // check student's access to cource or lesson. Be aware - do not use current user principal in business
-        // services. There can be situations when you don't have a current user (for eg background tasks).
-        // TODO before deletion we should check that currently logged user has course
-        // which is being passed as parameter
-        // Long authorId =
-        // userservice.findByUsername(principal.getName()).getAuthor().getId();
+        Long authorId = userservice.findByUsername(principal.getName()).getAuthor().getId();
+        if (!permissionCheckService.doesUserHaveUpdateDeleteCoursePermission(authorId, courseId)) {
+            throw new PermissionDeniedException("author doesn't own provided course");
+        }
         courseService.deleteCourse(courseId);
         Map<Object, Object> response = new HashMap<>();
         response.put("message", "course with id" + courseId + "was deleted");
@@ -81,6 +95,7 @@ public class CourseApiServiceImpl implements CourseApiService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<PageForCourses> getAllCoursesByPage(Integer page, Integer size) {
         PageForCourses pageForCourses = new PageForCourses();
         pageForCourses.setContent(courseService.getAllCourses(page, size).parallelStream()

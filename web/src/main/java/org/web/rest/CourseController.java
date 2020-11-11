@@ -52,8 +52,8 @@ public class CourseController {
     }
 
     @PatchMapping("/courses/{authorId}")
-    ResponseEntity editCourse(@RequestBody Course course, @PathVariable Long authorId) {
-        return courseApiService.editCourse(course, authorId);
+    ResponseEntity editCourse(@RequestBody Course course, Principal principal) {
+        return courseApiService.editCourse(course, principal);
     }
 
     @DeleteMapping("/courses/{courseId}")

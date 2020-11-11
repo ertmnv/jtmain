@@ -24,4 +24,6 @@ public interface CourseRepository {
     Long getNumberOfCourses();
 
     Map<Long, List<String>> getStudentNameByCourse();
+    
+    int getCourseCountByCourseIdAndAuthorId(Long authorId, Long courseId);
 }

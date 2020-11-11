@@ -19,6 +19,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -42,6 +43,7 @@ public class CourseServiceImpl implements CourseService {
     CacheManager cacheManager;
 
     @Override
+    @Transactional(propagation=Propagation.REQUIRED)
     public List<Course> getAllCourses(Integer page, Integer size) {
         Map<Long, List<String>> courseIdstudentName = courseRepository.getStudentNameByCourse();
         List<Course> courses = courseRepository.findAll(page, size);
@@ -50,7 +52,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation=Propagation.REQUIRED)
     @CacheEvict(value = "courses", allEntries = true)
     public Course createCourse(Course course, Long authorId) {
         Author author = authorService.findById(authorId);
@@ -66,7 +68,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation=Propagation.REQUIRED)
     @CacheEvict(value = "courses", allEntries = true)
     public Course editCourse(Course course, Long authorId) {
         Course originCourse = courseRepository.findById(course.getId());
@@ -75,7 +77,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation=Propagation.REQUIRED)
     @CacheEvict(value = "courses", allEntries = true)
     public void deleteCourse(Long courseId) {
         Course course = courseRepository.findById(courseId);
@@ -85,16 +87,19 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(propagation=Propagation.REQUIRED)
     public Course findById(Long courseId) {
         return courseRepository.findById(courseId);
     }
 
     @Override
+    @Transactional(propagation=Propagation.REQUIRED)
     public Collection<Course> getAllCoursesTakenByStudent(Long studentId) {
         return courseRepository.getAllCoursesTakenByStudent(studentId);
     }
 
     @Override
+    @Transactional(propagation=Propagation.REQUIRED)
     public Long getNumberOfCourses() {
         // TODO Auto-generated method stub
         return courseRepository.getNumberOfCourses();

@@ -103,5 +103,15 @@ public class CourseRepositoryImpl implements CourseRepository {
         }
         return usersByCourseMap;
     }
+    
+    public int getCourseCountByCourseIdAndAuthorId(Long authorId, Long courseId) {
+        Query q = em.createNativeQuery(
+                "SELECT * FROM jt_database.course c where c.id = :courseId and c.author_id = :authorId");
+        q.setParameter("authorId", authorId);
+        q.setParameter("courseId", courseId);
+        List<Object[]> courseByCourseIdAndAuthorId = q.getResultList();
+       
+        return courseByCourseIdAndAuthorId.size();
+    }
 
 }

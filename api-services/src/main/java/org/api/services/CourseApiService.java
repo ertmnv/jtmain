@@ -33,7 +33,7 @@ public interface CourseApiService {
 
     List<CourseDto> getAllCoursesTakenByStudent(Long studentId);
 
-    ResponseEntity editCourse(Course course, Long authorId);
+    ResponseEntity editCourse(Course course, Principal principal);
     
     ResponseEntity deleteCourse(Long courseId, Principal principal);
     

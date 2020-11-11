@@ -28,4 +28,11 @@ public class ExceptionHandlerAdvice {
         apiError.setValidationErrors(validationErrors);
         return apiError;
     }
+    
+    @ExceptionHandler({ PermissionDeniedException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ApiError handlePermissionDeniedException(PermissionDeniedException exception, HttpServletRequest request) {
+        ApiError apiError = new ApiError(400, "Permission Denied", request.getServletPath());
+        return apiError;
+    }
 }

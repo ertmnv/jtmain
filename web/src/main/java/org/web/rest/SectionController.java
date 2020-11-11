@@ -8,8 +8,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
+import org.api.services.impl.CourseMapper;
+import org.api.services.impl.SectionMapper;
 import org.db.dto.SectionDto;
 import org.db.model.Section;
+import org.mapstruct.factory.Mappers;
 import org.services.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +49,8 @@ public class SectionController {
         //  info about business layer.
         // Also I would recommend to create transaction in apilayer to have an ability to perform complex operations
         // which involves multiple business services.
-        return sectionService.getAllSections().stream().map(section -> section.toSectionDto())
+        SectionMapper INSTANCE = Mappers.getMapper( SectionMapper.class );
+        return sectionService.getAllSections().stream().map(section -> INSTANCE.sectionToSectionDto(section))
                 .collect(Collectors.toList());
     }
 

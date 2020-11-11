@@ -39,9 +39,11 @@ public class Section extends BaseEntity {
         sectionDto.setId(this.getId());
         sectionDto.setName(this.getName());
         sectionDto.setCourseId(this.getCourse().getId());
-        sectionDto.setLessonDtoList(
+        sectionDto.setLessons(
                 this.getLessons().stream().map(lesson -> lesson.toLessonDto()).collect(Collectors.toList()));
         return sectionDto;
     }
 
+    
+    
 }
