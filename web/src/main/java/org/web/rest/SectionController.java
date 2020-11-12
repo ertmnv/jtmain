@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
-import org.api.services.impl.CourseMapper;
-import org.api.services.impl.SectionMapper;
+import org.api.services.mappers.CourseMapper;
+import org.api.services.mappers.SectionMapper;
 import org.db.dto.SectionDto;
 import org.db.model.Section;
 import org.mapstruct.factory.Mappers;

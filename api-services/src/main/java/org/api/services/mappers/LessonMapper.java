@@ -1,4 +1,4 @@
-package org.api.services.impl;
+package org.api.services.mappers;
 
 import org.db.dto.LessonDto;
 import org.db.model.Lesson;

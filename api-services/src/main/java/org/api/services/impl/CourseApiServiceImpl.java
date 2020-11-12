@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.api.services.CourseApiService;
+import org.api.services.mappers.CourseMapper;
 import org.api.services.shared.PermissionDeniedException;
 import org.db.dto.CourseDto;
 import org.db.dto.PageForCourses;
@@ -64,20 +65,22 @@ public class CourseApiServiceImpl implements CourseApiService {
     @Override
     @Transactional
     public List<CourseDto> getAllCoursesTakenByStudent(Long studentId) {
-        return courseService.getAllCoursesTakenByStudent(studentId).stream().map(course -> course.toCourseDto())
+        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
+        return courseService.getAllCoursesTakenByStudent(studentId).stream().map(course -> INSTANCE.courseToCourseDto(course))
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public ResponseEntity editCourse(Course course, Principal principal) {
+        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
         Long authorId = userservice.findByUsername(principal.getName()).getAuthor().getId();
         if (!permissionCheckService.doesUserHaveUpdateDeleteCoursePermission(authorId, course.getId())) {
             throw new PermissionDeniedException("author doesn't own provided course");
         }
         Course editedCourse = courseService.editCourse(course, authorId);
         Map<Object, Object> response = new HashMap<>();
-        response.put("course", editedCourse.toCourseDto());
+        response.put("course", INSTANCE.courseToCourseDto(editedCourse));
         return ResponseEntity.ok(response);
     }
 
@@ -97,9 +100,10 @@ public class CourseApiServiceImpl implements CourseApiService {
     @Override
     @Transactional
     public ResponseEntity<PageForCourses> getAllCoursesByPage(Integer page, Integer size) {
+        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
         PageForCourses pageForCourses = new PageForCourses();
         pageForCourses.setContent(courseService.getAllCourses(page, size).parallelStream()
-                .map(course -> course.toCourseDto()).collect(Collectors.toList()));
+                .map(course -> INSTANCE.courseToCourseDto(course)).collect(Collectors.toList()));
         pageForCourses.setTotalElements(courseService.getNumberOfCourses());
         return new ResponseEntity<PageForCourses>(pageForCourses, new HttpHeaders(), HttpStatus.OK);
     }
