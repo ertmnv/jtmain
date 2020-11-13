@@ -1,10 +1,12 @@
 package org.web.rest;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.api.services.LessonApiService;
 import org.db.model.Lesson;
 import org.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,30 +27,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class LessonController {
 
     @Autowired
-    LessonService lessonService;
+    LessonApiService lessonApiService;
 
     @PostMapping("/lessons/{sectionId}")
     ResponseEntity createLesson(@Valid @RequestBody Lesson lesson, @PathVariable Long sectionId) {
-        lessonService.createLesson(lesson, sectionId);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("message", "lesson was created");
-        return ResponseEntity.ok(response);
+        return lessonApiService.createLesson(lesson, sectionId);
     }
 
     @DeleteMapping("/lessons/{lessonId}")
-    ResponseEntity deleteLesson(@PathVariable Long lessonId) {
-        lessonService.deleteLesson(lessonId);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("message", "lesson was deleted");
-        return ResponseEntity.ok(response);
+    ResponseEntity deleteLesson(@PathVariable Long lessonId, Principal principal) {
+        return lessonApiService.deleteLesson(lessonId, principal);
     }
 
     @PatchMapping("/lessons")
-    ResponseEntity updateLeson(@RequestBody Lesson lesson) {
-        lessonService.editLesson(lesson);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("message", "lesson was updated");
-        return ResponseEntity.ok(response);
+    ResponseEntity updateLeson(@RequestBody Lesson lesson, Principal principal) {
+        return lessonApiService.updateLeson(lesson, principal);
     }
 
 }

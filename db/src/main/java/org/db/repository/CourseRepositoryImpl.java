@@ -114,4 +114,31 @@ public class CourseRepositoryImpl implements CourseRepository {
         return courseByCourseIdAndAuthorId.size();
     }
 
+    @Override
+    public int getCourseCountByLessonIdAndAuthorId(Long authorId, Long lessonId) {
+        Query q = em.createNativeQuery(
+                "SELECT c.id FROM course c \n" + 
+                "inner join section s on c.id = s.course_id\n" + 
+                "inner join lesson l on s.id = l.section_id\n" + 
+                "where l.id=:lessonId and c.author_id=:authorId");
+        q.setParameter("authorId", authorId);
+        q.setParameter("lessonId", lessonId);
+        List<Object[]> courseByLessonIdAndAuthorId = q.getResultList();
+       
+        return courseByLessonIdAndAuthorId.size();
+    }
+    
+    @Override
+    public int getCourseCountBySectionIdAndAuthorId(Long authorId, Long sectionId) {
+        Query q = em.createNativeQuery(
+                "SELECT c.id FROM course c \n" + 
+                "inner join section s on c.id = s.course_id\n" + 
+                "where s.id=:sectionId and c.author_id=:authorId");
+        q.setParameter("authorId", authorId);
+        q.setParameter("sectionId", sectionId);
+        List<Object[]> courseBySectionIdAndAuthorId = q.getResultList();
+       
+        return courseBySectionIdAndAuthorId.size();
+    }
+
 }

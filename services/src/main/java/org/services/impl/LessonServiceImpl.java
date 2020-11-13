@@ -9,11 +9,13 @@ import org.db.repository.SectionRepository;
 import org.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED)
 public class LessonServiceImpl implements LessonService {
 
     @Autowired
@@ -29,7 +31,6 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    @Transactional
     public Lesson createLesson(Lesson lesson, Long sectionId) {
         Section section = sectionRepository.findById(sectionId);
         lesson.setSection(section);
@@ -44,7 +45,6 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    @Transactional
     public Lesson editLesson(Lesson lesson) {
         Lesson originalLesson = lessonRepository.findById(lesson.getId());
         originalLesson.setName(lesson.getName());
@@ -53,7 +53,6 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    @Transactional
     public void deleteLesson(Long lessonId) {
         lessonRepository.deleteById(lessonId);
     }

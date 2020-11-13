@@ -17,4 +17,14 @@ public class PermissionCheckServiceImpl implements PermissionCheckService {
         return courseRepository.getCourseCountByCourseIdAndAuthorId(authorId, courseId) >= 1;
     }
 
+    @Override
+    public boolean doesUserHaveUpdateDeleteLessonPermission(Long authorId, Long lessonId) {
+        return courseRepository.getCourseCountByLessonIdAndAuthorId(authorId, lessonId) >= 1;
+    }
+
+    @Override
+    public boolean doesUserHaveUpdateDeleteSectionPermission(Long authorId, Long sectionId) {
+        return courseRepository.getCourseCountBySectionIdAndAuthorId(authorId, sectionId) >= 1;
+    }
+
 }

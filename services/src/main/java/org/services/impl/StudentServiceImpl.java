@@ -12,10 +12,12 @@ import org.services.StudentService;
 import org.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED)
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
@@ -28,7 +30,6 @@ public class StudentServiceImpl implements StudentService {
     StudentRepository studentRepository;
 
     @Override
-    @Transactional
     public void enrollCourse(Long courseId, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         Course course = courseService.findById(courseId);
@@ -49,7 +50,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @Transactional
     public void leaveCourse(Long courseId, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         Course course = courseService.findById(courseId);
@@ -59,7 +59,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @Transactional
     public void deleteStudentFromCourse(Course course) {
         List<Student> students = course.getStudents();
         students.forEach(student -> student.getCourses().remove(course));

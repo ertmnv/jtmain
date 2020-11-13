@@ -16,6 +16,7 @@
 	<name>security</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jsonwebtoken.version>0.8.0</jsonwebtoken.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -24,19 +25,19 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
-        
-        <dependency>
-            <groupId>com.javatrening.n</groupId>
-            <artifactId>services</artifactId>
-            <version>1.0</version>
-        </dependency>
-		 <!--  
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${jsonwebtoken.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.javatrening.n</groupId>
-			<artifactId>db</artifactId>
+			<artifactId>services</artifactId>
 			<version>1.0</version>
 		</dependency>
-		-->
 	</dependencies>
 </project>

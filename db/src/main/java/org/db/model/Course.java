@@ -91,16 +91,5 @@ public class Course {
     // 2. What are going to do if you will have more complex cases, like dto which contains data of several entities?
     // It is better to use specific converters. Your model must, repos and business layer must know nothing about
     // representative layer.
-    public CourseDto toCourseDto() {
-        CourseDto courseDto = new CourseDto();
-        courseDto.setId(this.getId());
-        courseDto.setName(this.getName());
-        courseDto.setAuthorId(this.getAuthor().getId());
-        if (this.getStudents() != null) {
-            courseDto.setStudents(this.getStudents().stream().map(student -> String.valueOf(student.getId()))
-                    .collect(Collectors.toList()));
-        }
-        return courseDto;
-    }
 
 }

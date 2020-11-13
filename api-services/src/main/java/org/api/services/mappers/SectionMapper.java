@@ -10,7 +10,7 @@ import org.mapstruct.Mappings;
 public interface SectionMapper {
 
     @Mappings({ 
-        @Mapping(target = "lessonDtoList", source = "lessons")
+        @Mapping(target = "lessons", source = "lessons")
     })
     SectionDto sectionToSectionDto(Section section);
     

@@ -35,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Service
 public class CourseApiServiceImpl implements CourseApiService {
     
+    CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
+    
     @Autowired
     private CourseService courseService;
 
@@ -47,17 +49,15 @@ public class CourseApiServiceImpl implements CourseApiService {
     @Override
     @Transactional
     public ResponseEntity createCourse(Course course, Long authorId) {
-        // TODO @CurrentUser User user - should be used instead authorId
         Course createdCourse = courseService.createCourse(course, authorId);
         Map<Object, Object> response = new HashMap<>();
-        response.put("course", createdCourse.toCourseDto());
+        response.put("course", INSTANCE.courseToCourseDto(createdCourse));
         return ResponseEntity.ok(response);
     }
 
     @Override
     @Transactional
     public List<CourseDto> getAllCoursesManagedByAuthor(Long authorId) {
-        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
         return courseService.getAllCoursesManagedByAuthor(authorId).stream().map(course -> INSTANCE.courseToCourseDto(course))
                 .collect(Collectors.toList());
     }
@@ -65,7 +65,6 @@ public class CourseApiServiceImpl implements CourseApiService {
     @Override
     @Transactional
     public List<CourseDto> getAllCoursesTakenByStudent(Long studentId) {
-        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
         return courseService.getAllCoursesTakenByStudent(studentId).stream().map(course -> INSTANCE.courseToCourseDto(course))
                 .collect(Collectors.toList());
     }
@@ -73,7 +72,6 @@ public class CourseApiServiceImpl implements CourseApiService {
     @Override
     @Transactional
     public ResponseEntity editCourse(Course course, Principal principal) {
-        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
         Long authorId = userservice.findByUsername(principal.getName()).getAuthor().getId();
         if (!permissionCheckService.doesUserHaveUpdateDeleteCoursePermission(authorId, course.getId())) {
             throw new PermissionDeniedException("author doesn't own provided course");
@@ -100,7 +98,6 @@ public class CourseApiServiceImpl implements CourseApiService {
     @Override
     @Transactional
     public ResponseEntity<PageForCourses> getAllCoursesByPage(Integer page, Integer size) {
-        CourseMapper INSTANCE = Mappers.getMapper( CourseMapper.class );
         PageForCourses pageForCourses = new PageForCourses();
         pageForCourses.setContent(courseService.getAllCourses(page, size).parallelStream()
                 .map(course -> INSTANCE.courseToCourseDto(course)).collect(Collectors.toList()));

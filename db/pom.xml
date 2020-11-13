@@ -18,6 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<liquibase.tag>v.1.0</liquibase.tag>
 		<liquibase.rollbackTag>${liquibase.tag}</liquibase.rollbackTag>
+		<mysql.connetor.version>8.0.15</mysql.connetor.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -29,6 +30,11 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connetor.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.javatrening.n</groupId>

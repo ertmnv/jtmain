@@ -28,10 +28,4 @@ public class Lesson extends BaseEntity {
     @ManyToOne
     private Section section;
 
-    public LessonDto toLessonDto() {
-        LessonDto lessonDto = new LessonDto();
-        lessonDto.setId(this.getId());
-        lessonDto.setName(this.getName());
-        return lessonDto;
-    }
 }

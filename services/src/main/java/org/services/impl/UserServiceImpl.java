@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED)
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -30,18 +31,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private  BCryptPasswordEncoder passwordEncoder;
 
-    /*
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-            BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-    */
-
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public User register(User user) {
         // TODO Auto-generated method stub
         Role roleUser = roleRepository.findByName("ROLE_USER");

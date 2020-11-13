@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
+import org.api.services.SectionApiService;
 import org.api.services.mappers.CourseMapper;
 import org.api.services.mappers.SectionMapper;
 import org.db.dto.SectionDto;
@@ -31,49 +32,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class SectionController {
 
     @Autowired
-    private SectionService sectionService;
+    private SectionApiService sectionApiService;
 
     @PostMapping("/sections/{courseId}")
     ResponseEntity createSection(@Valid @RequestBody Section section, @PathVariable Long courseId) {
-        // TODO @CurrentUser User user - should be used instead authorId
-        Section createdSection = sectionService.createSection(section, courseId);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("message", "section was created");
-        return ResponseEntity.ok(response);
+        return sectionApiService.createSection(section, courseId);
     }
 
     @GetMapping("/sections")
     List<SectionDto> getAllSections(Pageable pageable) {
-        // CR1 for this purpose I would recommend to create api service and specific converter to convert
-        //  business entity into dto. Ideally controllers must know only api services interfaces and not know any
-        //  info about business layer.
-        // Also I would recommend to create transaction in apilayer to have an ability to perform complex operations
-        // which involves multiple business services.
-        SectionMapper INSTANCE = Mappers.getMapper( SectionMapper.class );
-        return sectionService.getAllSections().stream().map(section -> INSTANCE.sectionToSectionDto(section))
-                .collect(Collectors.toList());
+        return sectionApiService.getAllSections(pageable);
     }
 
     @DeleteMapping("/sections/{sectionId}")
     ResponseEntity deleteSection(@PathVariable Long sectionId, Principal principal) {
-        sectionService.deleteSection(sectionId);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("message", "section was deleted");
-        return ResponseEntity.ok(response);
+        return sectionApiService.deleteSection(sectionId, principal);
     }
 
     @PatchMapping("/sections")
-    ResponseEntity editSection(@RequestBody Section section) {
-        Section editedSection = sectionService.editSection(section);
-        Map<Object, Object> response = new HashMap<>();
-        response.put("message", editedSection.toSectionDto());
-        return ResponseEntity.ok(response);
+    ResponseEntity editSection(@RequestBody Section section, Principal principal) {
+        return sectionApiService.editSection(section, principal);
     }
 
     @GetMapping("/sections/{courseId}")
     List<SectionDto> getAllSectionsByCourse(@PathVariable Long courseId) {
-        return sectionService.getAllSectionsByCourse(courseId).stream().map(section -> section.toSectionDto())
-                .collect(Collectors.toList());
+        return sectionApiService.getAllSectionsByCourse(courseId);
     }
 
 }

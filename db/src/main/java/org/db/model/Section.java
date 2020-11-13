@@ -33,17 +33,5 @@ public class Section extends BaseEntity {
 
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<Lesson> lessons;
-
-    public SectionDto toSectionDto() {
-        SectionDto sectionDto = new SectionDto();
-        sectionDto.setId(this.getId());
-        sectionDto.setName(this.getName());
-        sectionDto.setCourseId(this.getCourse().getId());
-        sectionDto.setLessons(
-                this.getLessons().stream().map(lesson -> lesson.toLessonDto()).collect(Collectors.toList()));
-        return sectionDto;
-    }
-
-    
     
 }
