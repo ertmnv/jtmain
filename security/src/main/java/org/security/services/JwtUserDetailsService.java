@@ -10,24 +10,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
-
+/**
+ * @author snavrockiy
+ *
+ *         This service is used by the DaoAuthenticationProvider to load details
+ *         about the user during authentication. Inside loadUserByUsername
+ *         {@link UserService#findByUsername } is invoked and User is converted
+ *         to JwtUser that implements UserDetails. JwtUser is used in order to
+ *         decouple User from UserDetails.
+ */
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService userService;
 
-    /*
-    @Autowired
-    public JwtUserDetailsService(UserService userService) {
-        this.userService = userService;
-    }
-    */
-
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         User user = userService.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User with username" + username + "not found");

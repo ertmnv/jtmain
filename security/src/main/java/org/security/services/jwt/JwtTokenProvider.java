@@ -22,17 +22,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-
-
+/**
+ * @author snavrockiy
+ *
+ *         Class handles action related to creation, validation, parsing of JWT
+ *         token. Provides Authentication for {@link JwtTokenFilter} which put
+ *         Authentication into
+ *         org.springframework.security.core.context.SecurityContext.
+ */
 @Component
 public class JwtTokenProvider {
+
+    private static final int TOKE_PREFIX = 7;
 
     @Value("${jwt.token.secret}")
     private String secret;
@@ -54,7 +61,15 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String username, User user) {
+    /**
+     * Creates JWT token. Puts information into the token whether the user is a
+     * student or an author.
+     *
+     * @param username name of user for which the token is being generated
+     * @param user     the user for which the token is being generated
+     * @return JWT token
+     */
+    public String createToken(final String username, final User user) {
         List<Role> roles = user.getRoles();
         Author author = user.getAuthor();
         Student student = user.getStudent();
@@ -72,16 +87,34 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
-    public Authentication getAuthentication(String token) {
+    /**
+     * @param token the token the name of user will be extracted from
+     * @return Authentication that will be put in
+     *         org.springframework.security.core.context.SecurityContext by
+     *         {@link JwtTokenFilter}
+     */
+    public Authentication getAuthentication(final String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUsername(String token) {
+    /**
+     * Retrieves name of the user.
+     *
+     * @param token the token the name of user will be extracted from
+     * @return name of the user
+     */
+    public String getUsername(final String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateToken(String token) {
+    /**
+     * Validates token.
+     *
+     * @param token the token that will be validated
+     * @return whether token valid or not.
+     */
+    public boolean validateToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             if (claims.getBody().getExpiration().before(new Date())) {
@@ -94,15 +127,27 @@ public class JwtTokenProvider {
         }
     }
 
-    public String resolveToken(HttpServletRequest req) {
+    /**
+     * Obtains JW token from the header of request.
+     *
+     * @param req the request from the header of which the token will be extracted.
+     * @return JWT token
+     */
+    public String resolveToken(final HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(TOKE_PREFIX, bearerToken.length());
         }
         return null;
     }
 
-    private List<String> getRoleNames(List<Role> userRoles) {
+    /**
+     * Converts List<Role> to List<String> where each element is name of the Role.
+     *
+     * @param userRoles to convert
+     * @return list of roles
+     */
+    private List<String> getRoleNames(final List<Role> userRoles) {
         List<String> result = new ArrayList<>();
         userRoles.forEach(role -> {
             result.add(role.getName());

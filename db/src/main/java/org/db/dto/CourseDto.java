@@ -5,6 +5,9 @@ import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO that is used to pass course's data to client.
+ */
 @Data
 @NoArgsConstructor
 public class CourseDto {

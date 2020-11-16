@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 // CR1: you have lombok in your project. Why don't you use it for eg here? (See @Data annotation)
+/**
+ * DTO that is used to receive registration data from client.
+ */
 @Data
 @NoArgsConstructor
 public class RegistrationRequestDto {
