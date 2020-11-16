@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
 // CR1: you can consider to apply @Transactional to class level
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -26,12 +25,11 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public List<Section> getAllSections() {
-        // CR1: what does it mean (stub)?
         return sectionRepository.findAll();
     }
 
     @Override
-    public Section createSection(Section section, Long courseId) {
+    public Section createSection(final Section section, final Long courseId) {
         Course course = courseRepository.findById(courseId);
         section.setCourse(course);
         Section createdSection = sectionRepository.save(section);
@@ -39,7 +37,7 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public Section editSection(Section section) {
+    public Section editSection(final Section section) {
         Section originSection = sectionRepository.findById(section.getId());
         originSection.setName(section.getName());
         sectionRepository.save(originSection);
@@ -47,12 +45,12 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public void deleteSection(Long sectionId) {
+    public void deleteSection(final Long sectionId) {
         sectionRepository.deleteById(sectionId);
     }
 
     @Override
-    public List<Section> getAllSectionsByCourse(Long courseId) {
+    public List<Section> getAllSectionsByCourse(final Long courseId) {
         return sectionRepository.getAllSectionsByCourse(courseId);
     }
 }

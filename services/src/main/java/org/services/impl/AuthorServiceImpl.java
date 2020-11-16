@@ -12,13 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
-    AuthorRepository authorRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
     private UserService userService;
@@ -27,7 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Author register(String username) {
+    public Author register(final String username) {
         User user = userService.findByUsername(username);
         Author author = new Author();
         author.setUser(user);
@@ -36,7 +34,7 @@ public class AuthorServiceImpl implements AuthorService {
         return persistedAuthor;
     }
 
-    public Author findById(Long id) {
+    public Author findById(final Long id) {
         System.out.println("user was retrived from database");
         return authorRepository.findById(id);
     }

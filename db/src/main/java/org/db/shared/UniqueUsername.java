@@ -8,15 +8,23 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * @author snavrockiy
+ *
+ *         Is used to annotate name of user, user name must be unique across all
+ *         users.
+ *
+ *
+ */
 @Constraint(validatedBy = UniqueUsernameValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueUsername {
-    
+
     String message() default "name is already used";
 
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 
 }

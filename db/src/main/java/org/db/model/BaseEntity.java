@@ -16,6 +16,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author snavrockiy
+ *
+ *  Base JPA entity, separate table for base entity in DB will not be created.
+ */
 @MappedSuperclass
 @Data
 @NoArgsConstructor

@@ -7,30 +7,28 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
-import org.db.model.Course;
 import org.db.model.Section;
 
 @Repository
 public class SectionRepositoryImpl implements SectionRepository {
 
     @Autowired
-    EntityManager em;
+    private EntityManager em;
 
     @Override
-    public Section findById(Long id) {
+    public Section findById(final Long id) {
         Section section = em.find(Section.class, id);
         return section;
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         Section section = this.findById(id);
         em.remove(section);
     }
 
     @Override
-    public Section save(Section section) {
+    public Section save(final Section section) {
         if (section.getId() == null) {
             em.persist(section);
         } else {
@@ -45,7 +43,7 @@ public class SectionRepositoryImpl implements SectionRepository {
     }
 
     @Override
-    public List<Section> getAllSectionsByCourse(Long courseId) {
+    public List<Section> getAllSectionsByCourse(final Long courseId) {
         return em.createQuery("SELECT s FROM Section s LEFT JOIN s.course c WHERE c.id=:courseId", Section.class)
                 .setParameter("courseId", courseId).getResultList();
     }

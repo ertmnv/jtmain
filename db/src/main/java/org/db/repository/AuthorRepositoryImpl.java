@@ -13,11 +13,11 @@ import org.db.model.Author;
 public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Autowired
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Author save(Author author) {
+    public Author save(final Author author) {
         if (author.getId() == null) {
             em.persist(author);
         } else {
@@ -28,7 +28,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public Author findById(Long id) {
+    public Author findById(final Long id) {
         Author author = em.find(Author.class, id);
         return author;
     }

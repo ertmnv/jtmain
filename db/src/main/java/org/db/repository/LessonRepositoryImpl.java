@@ -13,21 +13,21 @@ import org.db.model.Lesson;
 public class LessonRepositoryImpl implements LessonRepository {
 
     @Autowired
-    EntityManager em;
+    private EntityManager em;
 
     @Override
-    public Lesson findById(Long id) {
+    public Lesson findById(final Long id) {
         return em.find(Lesson.class, id);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         Lesson lesson = this.findById(id);
         em.remove(lesson);
     }
 
     @Override
-    public Lesson save(Lesson lesson) {
+    public Lesson save(final Lesson lesson) {
         if (lesson.getId() == null) {
             em.persist(lesson);
         } else {
@@ -42,7 +42,7 @@ public class LessonRepositoryImpl implements LessonRepository {
     }
 
     @Override
-    public List<Lesson> getAllLessonsBySection(Long sectionId) {
+    public List<Lesson> getAllLessonsBySection(final Long sectionId) {
         return em.createQuery("SELECT l FROM Lesson l LEFT JOIN l.section s WHERE s.id =:sectionId", Lesson.class)
                 .setParameter("sectionId", sectionId).getResultList();
     }

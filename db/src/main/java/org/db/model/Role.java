@@ -12,11 +12,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author snavrockiy
+ *
+ *         JPA entity representing user's roles.
+ */
 @Entity
 @Table(name = "roles")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class Role extends BaseEntity {
 
     @Column(name = "name")

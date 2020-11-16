@@ -1,6 +1,5 @@
 package org.services.impl;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.db.model.Course;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
 public class StudentServiceImpl implements StudentService {
@@ -24,14 +22,13 @@ public class StudentServiceImpl implements StudentService {
     private CourseService courseService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    StudentRepository studentRepository;
+    private StudentRepository studentRepository;
 
     @Override
-    public void enrollCourse(Long courseId, Principal principal) {
-        User user = userService.findByUsername(principal.getName());
+    public void enrollCourse(final Long courseId, final User user) {
         Course course = courseService.findById(courseId);
         Student student;
         if (user.getStudent() == null) {
@@ -43,15 +40,14 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(student);
     }
 
-    public Student createStudent(User user) {
+    public Student createStudent(final User user) {
         Student student = new Student();
         student.setUser(user);
         return student;
     }
 
     @Override
-    public void leaveCourse(Long courseId, Principal principal) {
-        User user = userService.findByUsername(principal.getName());
+    public void leaveCourse(final Long courseId, final User user) {
         Course course = courseService.findById(courseId);
         Student student = user.getStudent();
         student.removeCourse(course);
@@ -59,7 +55,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudentFromCourse(Course course) {
+    public void deleteStudentFromCourse(final Course course) {
         List<Student> students = course.getStudents();
         students.forEach(student -> student.getCourses().remove(course));
     }

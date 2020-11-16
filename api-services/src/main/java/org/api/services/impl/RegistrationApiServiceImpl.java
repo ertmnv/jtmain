@@ -13,17 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class RegistrationApiServiceImpl implements RegistrationApiService{
+public class RegistrationApiServiceImpl implements RegistrationApiService {
 
     @Autowired
     private AuthorService authorService;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-    
+
     @Override
     @Transactional
-    public ResponseEntity registerAuthor(String username) {
+    public ResponseEntity registerAuthor(final String username) {
         Author author = authorService.register(username);
         String token = jwtTokenProvider.createToken(username, author.getUser());
         Map<Object, Object> response = new HashMap<>();

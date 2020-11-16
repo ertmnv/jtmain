@@ -16,19 +16,28 @@ services:
       - ./sql-scripts:/docker-entrypoint-initdb.d/
     networks:
       - app-net
- # app:
- #   restart: on-failure
- #   build:
- #     context: ../
- #     dockerfile: ./docker/Dockerfile
- #   expose:
- #     - "9090"
- #   ports:
- #     - 9090:9090
- #   depends_on:
- #      - db
- #    networks:
- #     - app-net
+  app:
+    restart: on-failure
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    expose:
+      - "9090"
+    ports:
+      - 9090:9090
+    depends_on:
+      - db
+    networks:
+      - app-net
+  front:
+    container_name: front
+    build:
+      context: ../
+      dockerfile: ./front/Dockerfile
+    ports:
+      - 3001:3000
+    networks:
+      - app-net
 volumes:
   my-db:
 

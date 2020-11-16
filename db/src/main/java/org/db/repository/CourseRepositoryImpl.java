@@ -8,45 +8,38 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 import javax.persistence.Query;
-import javax.persistence.QueryHint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.QueryHints;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-
-import org.db.model.Author;
 import org.db.model.Course;
 
 @Repository
 public class CourseRepositoryImpl implements CourseRepository {
 
     @Autowired
-    EntityManager em;
+    private EntityManager em;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Course findById(Long id) {
+    public Course findById(final Long id) {
         Course course = em.find(Course.class, id);
         return course;
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         Course course = this.findById(id);
         em.remove(course);
     }
 
     @Override
-    public Course save(Course course) {
+    public Course save(final Course course) {
         if (course.getId() == null) {
             em.persist(course);
         } else {
@@ -57,7 +50,7 @@ public class CourseRepositoryImpl implements CourseRepository {
 
     @Override
     @Transactional
-    public List<Course> findAll(Integer page, Integer size) {
+    public List<Course> findAll(final Integer page, final Integer size) {
         List<Course> listCourse = jdbcTemplate.query("SELECT * FROM course", (rs, rowNum) -> {
             Course c = new Course();
             c.setId(rs.getLong("id"));
@@ -69,13 +62,13 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public List<Course> getAllCoursesManagedByAuthor(Long authorId) {
+    public List<Course> getAllCoursesManagedByAuthor(final Long authorId) {
         return em.createQuery("SELECT c FROM Course c LEFT JOIN c.author a WHERE a.id=:authorId", Course.class)
                 .setParameter("authorId", authorId).getResultList();
     }
 
     @Override
-    public Collection<Course> getAllCoursesTakenByStudent(Long studentId) {
+    public Collection<Course> getAllCoursesTakenByStudent(final Long studentId) {
         return em.createQuery("SELECT c FROM Course c LEFT JOIN c.students s WHERE s.id=:studentId", Course.class)
                 .setParameter("studentId", studentId).getResultList();
     }
@@ -103,41 +96,36 @@ public class CourseRepositoryImpl implements CourseRepository {
         }
         return usersByCourseMap;
     }
-    
-    public int getCourseCountByCourseIdAndAuthorId(Long authorId, Long courseId) {
+
+    public int getCourseCountByCourseIdAndAuthorId(final Long authorId, final Long courseId) {
         Query q = em.createNativeQuery(
                 "SELECT * FROM jt_database.course c where c.id = :courseId and c.author_id = :authorId");
         q.setParameter("authorId", authorId);
         q.setParameter("courseId", courseId);
         List<Object[]> courseByCourseIdAndAuthorId = q.getResultList();
-       
+
         return courseByCourseIdAndAuthorId.size();
     }
 
     @Override
-    public int getCourseCountByLessonIdAndAuthorId(Long authorId, Long lessonId) {
-        Query q = em.createNativeQuery(
-                "SELECT c.id FROM course c \n" + 
-                "inner join section s on c.id = s.course_id\n" + 
-                "inner join lesson l on s.id = l.section_id\n" + 
-                "where l.id=:lessonId and c.author_id=:authorId");
+    public int getCourseCountByLessonIdAndAuthorId(final Long authorId, final Long lessonId) {
+        Query q = em.createNativeQuery("SELECT c.id FROM course c \n" + "inner join section s on c.id = s.course_id\n"
+                + "inner join lesson l on s.id = l.section_id\n" + "where l.id=:lessonId and c.author_id=:authorId");
         q.setParameter("authorId", authorId);
         q.setParameter("lessonId", lessonId);
         List<Object[]> courseByLessonIdAndAuthorId = q.getResultList();
-       
+
         return courseByLessonIdAndAuthorId.size();
     }
-    
+
     @Override
-    public int getCourseCountBySectionIdAndAuthorId(Long authorId, Long sectionId) {
-        Query q = em.createNativeQuery(
-                "SELECT c.id FROM course c \n" + 
-                "inner join section s on c.id = s.course_id\n" + 
-                "where s.id=:sectionId and c.author_id=:authorId");
+    public int getCourseCountBySectionIdAndAuthorId(final Long authorId, final Long sectionId) {
+        Query q = em.createNativeQuery("SELECT c.id FROM course c \n" + "inner join section s on c.id = s.course_id\n"
+                + "where s.id=:sectionId and c.author_id=:authorId");
         q.setParameter("authorId", authorId);
         q.setParameter("sectionId", sectionId);
         List<Object[]> courseBySectionIdAndAuthorId = q.getResultList();
-       
+
         return courseBySectionIdAndAuthorId.size();
     }
 

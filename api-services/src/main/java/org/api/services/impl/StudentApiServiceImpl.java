@@ -13,13 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 @Service
 @Transactional
 public class StudentApiServiceImpl implements StudentApiService {
-    
+
     @Autowired
     private StudentService studentService;
 
@@ -27,19 +26,20 @@ public class StudentApiServiceImpl implements StudentApiService {
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    public ResponseEntity enrollCourse(Long courseId, Principal principal) {
-        studentService.enrollCourse(courseId, principal);
+    public ResponseEntity enrollCourse(final Long courseId, final Principal principal) {
         User user = userService.findByUsername(principal.getName());
+        studentService.enrollCourse(courseId, user);
         String token = jwtTokenProvider.createToken(principal.getName(), user);
         Map<Object, Object> response = new HashMap<>();
         response.put("token", token);
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity leaveCourse(Long courseId, Principal principal) {
-        studentService.leaveCourse(courseId, principal);
+    public ResponseEntity leaveCourse(final Long courseId, final Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        studentService.leaveCourse(courseId, user);
         Map<Object, Object> response = new HashMap<>();
         response.put("message", "you leave course with id" + courseId);
         return ResponseEntity.ok(response);

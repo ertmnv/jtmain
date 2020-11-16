@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
+    private static final String PERMISSION_DENIED = "Permission Denied";
+    private static final String VALIDATION_ERROR = "Validation error";
+    private static final int BAD_REQUEST_STATUS = 400;
+
     @ExceptionHandler({ MethodArgumentNotValidException.class })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ApiError handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {
-        ApiError apiError = new ApiError(400, "Validation error", request.getServletPath());
+    ApiError handleValidationException(final MethodArgumentNotValidException exception,
+            final HttpServletRequest request) {
+        ApiError apiError = new ApiError(BAD_REQUEST_STATUS, VALIDATION_ERROR, request.getServletPath());
         BindingResult result = exception.getBindingResult();
         Map<String, String> validationErrors = new HashMap<>();
         for (FieldError fieldError : result.getFieldErrors()) {
@@ -28,11 +33,12 @@ public class ExceptionHandlerAdvice {
         apiError.setValidationErrors(validationErrors);
         return apiError;
     }
-    
+
     @ExceptionHandler({ PermissionDeniedException.class })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ApiError handlePermissionDeniedException(PermissionDeniedException exception, HttpServletRequest request) {
-        ApiError apiError = new ApiError(400, "Permission Denied", request.getServletPath());
+    ApiError handlePermissionDeniedException(final PermissionDeniedException exception,
+            final HttpServletRequest request) {
+        ApiError apiError = new ApiError(BAD_REQUEST_STATUS, PERMISSION_DENIED, request.getServletPath());
         return apiError;
     }
 }

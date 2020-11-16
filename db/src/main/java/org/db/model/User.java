@@ -16,12 +16,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.JoinColumn;
 
-
+/**
+ * @author snavrockiy
+ *
+ *         JPA entity representing a user.
+ *
+ */
 @Entity
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity {
 
     @Column(name = "username")
@@ -46,9 +51,9 @@ public class User extends BaseEntity {
     private List<Role> roles;
 
     @OneToOne(mappedBy = "user")
-    Author author;
+    private Author author;
 
     @OneToOne(mappedBy = "user")
-    Student student;
+    private Student student;
 
 }

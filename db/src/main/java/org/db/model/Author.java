@@ -11,10 +11,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author snavrockiy
+ *
+ *   JPA entity representing a Author of the course.
+ *
+ */
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class Author extends BaseEntity {
 
     @OneToOne

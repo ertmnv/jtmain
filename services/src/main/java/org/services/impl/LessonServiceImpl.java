@@ -1,7 +1,5 @@
 package org.services.impl;
 
-import java.util.List;
-
 import org.db.model.Lesson;
 import org.db.model.Section;
 import org.db.repository.LessonRepository;
@@ -11,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -25,13 +21,7 @@ public class LessonServiceImpl implements LessonService {
     private LessonRepository lessonRepository;
 
     @Override
-    public List<Lesson> getAllLessons() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Lesson createLesson(Lesson lesson, Long sectionId) {
+    public Lesson createLesson(final Lesson lesson, final Long sectionId) {
         Section section = sectionRepository.findById(sectionId);
         lesson.setSection(section);
         lessonRepository.save(lesson);
@@ -39,13 +29,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<Lesson> getAllLessonsBySection(Long sectionId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Lesson editLesson(Lesson lesson) {
+    public Lesson editLesson(final Lesson lesson) {
         Lesson originalLesson = lessonRepository.findById(lesson.getId());
         originalLesson.setName(lesson.getName());
         lessonRepository.save(originalLesson);
@@ -53,7 +37,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void deleteLesson(Long lessonId) {
+    public void deleteLesson(final Long lessonId) {
         lessonRepository.deleteById(lessonId);
     }
 

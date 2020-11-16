@@ -3,8 +3,6 @@ package org.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import org.db.model.Role;
 import org.db.model.Status;
 import org.db.model.User;
@@ -17,22 +15,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private  RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    private  BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public User register(User user) {
+    public User register(final User user) {
         // TODO Auto-generated method stub
         Role roleUser = roleRepository.findByName("ROLE_USER");
         List<Role> userRoles = new ArrayList<Role>();
@@ -52,14 +49,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public User findByUsername(final String username) {
         // TODO Auto-generated method stub
         User result = userRepository.findByUsername(username);
         return result;
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(final Long id) {
         // TODO Auto-generated method stub
         User result = userRepository.findById(id).orElse(null);
         if (result == null) {
@@ -69,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(final long id) {
         // TODO Auto-generated method stub
         userRepository.deleteById(id);
     }

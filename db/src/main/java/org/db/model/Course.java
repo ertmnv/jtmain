@@ -1,13 +1,10 @@
 package org.db.model;
 
-import org.db.dto.CourseDto;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,12 +14,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+/**
+ * @author snavrockiy
+ *
+ *         JPA entity representing a Course.
+ *
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -33,7 +33,6 @@ public class Course {
     private Long id;
 
     @NotNull
-    @Size(min=3, max=100, message="name of the course is not valid")
     @Column(nullable = false)
     private String name;
 
@@ -41,10 +40,10 @@ public class Course {
     private Author author;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    List<Section> section;
+    private List<Section> section;
 
     @ManyToMany(mappedBy = "courses")
-    List<Student> students;
+    private List<Student> students;
 
     @UpdateTimestamp
     private LocalDateTime lastUpdatedDate;
@@ -52,7 +51,7 @@ public class Course {
     @CreationTimestamp
     private LocalDateTime createdDate;
 
-    public Course(String name) {
+    public Course(final String name) {
         this.name = name;
     }
 
@@ -70,26 +69,33 @@ public class Course {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Course other = (Course) obj;
         if (id == null) {
-            if (other.id != null)
+            if (other.id != null) {
                 return false;
-        } else if (!id.equals(other.id))
+            }
+        } else if (!id.equals(other.id)) {
             return false;
+        }
         return true;
     }
 
     // CR1: It is not a good idea to couple business model and representation model.
     // 1. You couple two layes model and representative model
-    // 2. What are going to do if you will have more complex cases, like dto which contains data of several entities?
-    // It is better to use specific converters. Your model must, repos and business layer must know nothing about
+    // 2. What are going to do if you will have more complex cases, like dto which
+    // contains data of several entities?
+    // It is better to use specific converters. Your model must, repos and business
+    // layer must know nothing about
     // representative layer.
 
 }

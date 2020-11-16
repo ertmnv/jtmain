@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class AuthenticationApiServiceImpl implements AuthenticationApiService {
 
@@ -36,10 +35,10 @@ public class AuthenticationApiServiceImpl implements AuthenticationApiService {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
     }
-    
+
     @Override
     @Transactional
-    public ResponseEntity login(AuthenticationRequestDto requestDto) {
+    public ResponseEntity login(final AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getUsername();
             authenticationManager
@@ -60,7 +59,7 @@ public class AuthenticationApiServiceImpl implements AuthenticationApiService {
 
     @Override
     @Transactional
-    public ResponseEntity register(RegistrationRequestDto requestDto) {
+    public ResponseEntity register(final RegistrationRequestDto requestDto) {
         User user = requestDto.toUser();
         // CR1 a bit strange code. You have created a user but didn't return it back.
         userService.register(user);

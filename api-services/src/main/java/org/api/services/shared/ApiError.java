@@ -15,7 +15,7 @@ public class ApiError {
 
     private Map<String, String> validationErrors;
 
-    public ApiError(int status, String message, String url) {
+    public ApiError(final int status, final String message, final String url) {
         super();
         this.status = status;
         this.message = message;
@@ -26,7 +26,7 @@ public class ApiError {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(final long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -34,7 +34,7 @@ public class ApiError {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(final int status) {
         this.status = status;
     }
 
@@ -42,7 +42,7 @@ public class ApiError {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 
@@ -50,7 +50,7 @@ public class ApiError {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -58,7 +58,7 @@ public class ApiError {
         return validationErrors;
     }
 
-    public void setValidationErrors(Map<String, String> validationErrors) {
+    public void setValidationErrors(final Map<String, String> validationErrors) {
         this.validationErrors = validationErrors;
     }
 

@@ -6,12 +6,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(uses=LessonMapper.class)
+@Mapper(uses = LessonMapper.class)
 public interface SectionMapper {
 
-    @Mappings({ 
-        @Mapping(target = "lessons", source = "lessons")
-    })
+    @Mappings({ @Mapping(target = "lessons", source = "lessons") })
     SectionDto sectionToSectionDto(Section section);
-    
+
 }

@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface LessonMapper {
-    
+
     LessonDto lessonToLessonDto(Lesson lesson);
 
 }
