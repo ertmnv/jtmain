@@ -37,6 +37,9 @@ public class SectionApiServiceImpl implements SectionApiService {
     @Autowired
     private UserService userservice;
 
+    // CR2: For Api service is better to work with dtos, even for crud operation.
+    // And it would be great to see bean validation on each request dto before it comes to service api layer...
+    // This CR is for all controllers.
     public ResponseEntity createSection(final Section section, final Long courseId) {
         Section createdSection = sectionService.createSection(section, courseId);
         Map<Object, Object> response = new HashMap<>();
